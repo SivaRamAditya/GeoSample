@@ -1,0 +1,8 @@
+{
+  "name": "GeoSample",
+  "app_id": "62b7ad8d",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
