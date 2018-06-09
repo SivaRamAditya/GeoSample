@@ -15,7 +15,7 @@ export class TrackingLocationPage implements OnInit {
     currentPosition: Geoposition;
     @ViewChild('map') mapElement: ElementRef;
     map: any;
-    trackingTime: any;
+    trackLivePosition: any;
     constructor(private geoLocation: Geolocation, private zone: NgZone, private backgroundLocation: BackgroundGeolocation) { }
 
     ngOnInit(): void {
@@ -27,23 +27,23 @@ export class TrackingLocationPage implements OnInit {
             enableHighAccuracy: false,
             frequency: 3000
         };
-        this.geoLocation.getCurrentPosition(options).then((pos: Geoposition) => {
-
-            const currentPos = pos;
-            console.log(pos);
-            // if(!this.trackingTime)
-            //  this.updateWatchPosition();
-            this.zone.run(() => {
-                this.getUserPosition();
-                alert("Your Latitude is "+pos.coords.latitude);
-            });
-            this.addMap(pos.coords.latitude,pos.coords.longitude);
+        // this.geoLocation.getCurrentPosition(options).then((pos: Geoposition) => {
+        //     console.log(pos);
+        //     // if(!this.trackingTime)
+        //     //  this.updateWatchPosition();
+        //     this.zone.run(() => {
+        //         this.getUserPosition();
+        //         alert("Your Latitude is "+pos.coords.latitude);
+        //     });
+        //     this.addMap(pos.coords.latitude,pos.coords.longitude);
+        // }, (err: PositionError) => {
+        //     console.log("error : " + err.message);
+        // });
+        this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
+            this.addMap(position.coords.latitude,position.coords.longitude);
         }, (err: PositionError) => {
             console.log("error : " + err.message);
         });
-        // this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
-        //     console.log(position);
-        // });
     }
 
     addMap(lat, long) {
@@ -78,12 +78,12 @@ export class TrackingLocationPage implements OnInit {
         });
     }
 
-    updateWatchPosition() {
-       if(this.trackingTime){
-           clearTimeout(this.trackingTime);
-       }
-       this.trackingTime = setTimeout(() => {
-           this.getUserPosition();
-       }, 1000);
-    }
+    // updateWatchPosition() {
+    //    if(this.trackingTime){
+    //        clearTimeout(this.trackingTime);
+    //    }
+    //    this.trackingTime = setTimeout(() => {
+    //        this.getUserPosition();
+    //    }, 1000);
+    // }
 }
