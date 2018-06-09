@@ -39,9 +39,9 @@ export class TrackingLocationPage implements OnInit {
         });
         this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
             console.log(position);
-            // this.zone.run(() => {
-            //     console.log(position.coords.latitude+' '+position.coords.longitude);
-            // });
+            this.zone.run(() => {
+                console.log(position.coords.latitude+' '+position.coords.longitude);
+            });
         });
     }
 
