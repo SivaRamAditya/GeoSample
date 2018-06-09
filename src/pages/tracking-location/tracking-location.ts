@@ -33,16 +33,16 @@ export class TrackingLocationPage implements OnInit {
             console.log(pos);
             // if(!this.trackingTime)
             //  this.updateWatchPosition();
+            this.zone.run(() => {
+                this.getUserPosition();
+            });
             this.addMap(pos.coords.latitude,pos.coords.longitude);
         }, (err: PositionError) => {
             console.log("error : " + err.message);
         });
-        this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
-            console.log(position);
-            this.zone.run(() => {
-                console.log(position.coords.latitude+' '+position.coords.longitude);
-            });
-        });
+        // this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
+        //     console.log(position);
+        // });
     }
 
     addMap(lat, long) {
