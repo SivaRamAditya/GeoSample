@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -41,6 +42,7 @@ export function provideSettings(storage: Storage) {
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

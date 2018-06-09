@@ -1,14 +1,15 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            My Current Location Details
+            Location Directions
         </ion-title>
 
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+    <input type="text" [(ngModel)]="geolocation" #dest ion-input padding placeholder="Enter Location"/>
+    <button ion-button (click)="getDirections()">Get Directions</button>
     <div #map id="map"></div>
 
 </ion-content>
