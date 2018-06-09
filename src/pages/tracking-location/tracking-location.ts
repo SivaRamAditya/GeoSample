@@ -35,6 +35,7 @@ export class TrackingLocationPage implements OnInit {
             //  this.updateWatchPosition();
             this.zone.run(() => {
                 this.getUserPosition();
+                alert("Your Latitude is "+pos.coords.latitude);
             });
             this.addMap(pos.coords.latitude,pos.coords.longitude);
         }, (err: PositionError) => {
