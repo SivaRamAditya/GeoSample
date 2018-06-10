@@ -35,7 +35,7 @@ export class TrackingLocationPage implements OnInit {
                 alert("Your current location is defaultly selected as starting point");
                 this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
                 this.getUserPosition();
-            }, (error) => {
+            }).catch((error) => {
                 alert(JSON.stringify(error));
                 alert('Please enable the location details');
             });
@@ -67,15 +67,10 @@ export class TrackingLocationPage implements OnInit {
                 this.currentPosition = position;
                 this.addMap(position.coords.latitude, position.coords.longitude);
                 this.watchCounter = 1;
-                this.marker = new google.maps.Marker({
-                    map: this.map,
-                    // animation: google.maps.Animation.DROP,
-                    position: this.map.getCenter()
-                });
             } else {
                 //this.addMap(position.coords.latitude, position.coords.longitude);
                 let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                this.addMarker(latLng);
+                this.updateGeocode(latLng);
                 this.map.setCenter(latLng);
             }
         }, (err: PositionError) => {
@@ -100,7 +95,15 @@ export class TrackingLocationPage implements OnInit {
     }
 
     addMarker(latLng: any) {
-        this.marker.setPosition(latLng);
+        if (!this.marker) {
+            this.marker = new google.maps.Marker({
+                map: this.map,
+                // animation: google.maps.Animation.DROP,
+                position: this.map.getCenter()
+            });
+        } else {
+            this.marker.setPosition(latLng);
+        }
         let content = "<p>This is your current position !</p>";
         let infoWindow = new google.maps.InfoWindow({
             content: content
@@ -117,6 +120,9 @@ export class TrackingLocationPage implements OnInit {
                 console.log(results);
                 if (results && results.length > 0) {
                     this.origin = results[0].formatted_address;
+                    if (this.autocomplete.getPlace() && this.autocomplete.getPlace().formatted_address) {
+                        this.getDirections();
+                    }
                     //this.map.setCenter(results[0].geometry.location);
                     //this.addMarker();
                 }
