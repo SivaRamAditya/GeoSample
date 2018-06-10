@@ -17,20 +17,23 @@ export class TrackingLocationPage implements OnInit {
     @ViewChild('map') mapElement: ElementRef;
     @ViewChild('dest') destElement: ElementRef;
     map: any;
-    trackLivePosition: any;
+    marker: any;
+    watchCounter: number = 0;
     autocomplete: any;
     directionsDisplay = new google.maps.DirectionsRenderer;
     origin: string;
     constructor(private geoLocation: Geolocation, private zone: NgZone, private backgroundLocation: BackgroundGeolocation) { }
 
     ngOnInit(): void {
+        alert("Your current location is defaultly selected as starting point");
+        this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
         this.getUserPosition();
     }
 
     getUserPosition() {
         const options = {
             enableHighAccuracy: false,
-            //frequency: 3000
+            frequency: 5000
         };
         // this.geoLocation.getCurrentPosition(options).then((pos: Geoposition) => {
         //     console.log(pos);
@@ -45,11 +48,22 @@ export class TrackingLocationPage implements OnInit {
         //     console.log("error : " + err.message);
         // });
         this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
-            alert("Your current location is selected as starting point");
-            this.geolocation = '';
-            this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
-            this.currentPosition = position;
-            this.addMap(position.coords.latitude, position.coords.longitude);
+            if (this.currentPosition !== position && this.watchCounter == 0) {                
+                this.geolocation = '';
+                this.currentPosition = position;
+                this.addMap(position.coords.latitude, position.coords.longitude);
+                this.watchCounter = 1;
+                this.marker = new google.maps.Marker({
+                    map: this.map,
+                   // animation: google.maps.Animation.DROP,
+                    position: this.map.getCenter()
+                });
+            } else {
+                //this.addMap(position.coords.latitude, position.coords.longitude);
+                let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                this.addMarker(latLng);
+                this.map.setCenter(latLng);
+            }
         }, (err: PositionError) => {
             console.log("error : " + err.message);
         });
@@ -71,43 +85,31 @@ export class TrackingLocationPage implements OnInit {
 
     }
 
-    addMarker() {
-        let marker = new google.maps.Marker({
-            map: this.map,
-            animation: google.maps.Animation.DROP,
-            position: this.map.getCenter()
-        });
-
+    addMarker(latLng: any) {
+        this.marker.setPosition(latLng);
         let content = "<p>This is your current position !</p>";
         let infoWindow = new google.maps.InfoWindow({
             content: content
         });
-
-
-        google.maps.event.addListener(marker, 'click', () => {
-            infoWindow.open(this.map, marker);
+        google.maps.event.addListener(this.marker, 'click', () => {
+            infoWindow.open(this.map, this.marker);
         });
     }
 
     updateGeocode(latLng) {
         let geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'location': latLng}, (results, status)=> {
+        geocoder.geocode({ 'location': latLng }, (results, status) => {
             if (status === 'OK') {
                 console.log(results);
-                if(results && results.length > 0) {
-                  this.origin = results[0].formatted_address;
-                  //this.map.setCenter(results[0].geometry.location);
-                  //this.addMarker();
+                if (results && results.length > 0) {
+                    this.origin = results[0].formatted_address;
+                    //this.map.setCenter(results[0].geometry.location);
+                    //this.addMarker();
                 }
-              //resultsMap.setCenter(results[0].geometry.location);
-            //   var marker = new google.maps.Marker({
-            //     map: resultsMap,
-            //     position: results[0].geometry.location
-            //   });
             } else {
-              alert('Geocode was not successful for the following reason: ' + status);
+                alert('Geocode was not successful for the following reason: ' + status);
             }
-          });
+        });
     }
 
     getDirections() {
