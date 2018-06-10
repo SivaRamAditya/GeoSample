@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef, OnInit, NgZone } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, Platform } from 'ionic-angular';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 declare var google;
 
@@ -22,18 +23,28 @@ export class TrackingLocationPage implements OnInit {
     autocomplete: any;
     directionsDisplay = new google.maps.DirectionsRenderer;
     origin: string;
-    constructor(private geoLocation: Geolocation, private zone: NgZone, private backgroundLocation: BackgroundGeolocation) { }
+    constructor(private geoLocation: Geolocation, private zone: NgZone, private platform: Platform, private diagnostic: Diagnostic, private backgroundLocation: BackgroundGeolocation) { }
 
     ngOnInit(): void {
-        alert("Your current location is defaultly selected as starting point");
-        this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
-        this.getUserPosition();
+        if (this.platform.navigatorPlatform() === "Win32") {
+            alert("Your current location is defaultly selected as starting point");
+            this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
+            this.getUserPosition();
+        } else {
+            this.diagnostic.isLocationEnabled().then((isAvailable)=> {
+                alert("Your current location is defaultly selected as starting point");
+                this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
+                this.getUserPosition();
+            }).catch((error)=> {
+                 alert('Please enable the location details');
+            });
+        }
     }
 
     getUserPosition() {
         const options = {
             enableHighAccuracy: false,
-            frequency: 5000
+            frequency: 3000
         };
         // this.geoLocation.getCurrentPosition(options).then((pos: Geoposition) => {
         //     console.log(pos);

@@ -11,6 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
 import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
@@ -59,6 +60,7 @@ export function provideSettings(storage: Storage) {
     MyApp
   ],
   providers: [
+    Diagnostic,
     BackgroundGeolocation,
     Geolocation,
     Api,

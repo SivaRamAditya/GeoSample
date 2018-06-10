@@ -24,6 +24,7 @@
     "@ionic-native/background-geolocation": "^4.7.0",
     "@ionic-native/camera": "4.3.3",
     "@ionic-native/core": "4.7.0",
+    "@ionic-native/diagnostic": "^4.7.0",
     "@ionic-native/geolocation": "^4.7.0",
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/status-bar": "4.7.0",
@@ -33,6 +34,7 @@
     "@ngx-translate/http-loader": "^2.0.0",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-mauron85-background-geolocation": "^2.3.5",
+    "cordova.plugins.diagnostic": "^4.0.8",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "rxjs": "5.5.11",
@@ -47,7 +49,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-mauron85-background-geolocation": {}
+      "cordova-plugin-mauron85-background-geolocation": {},
+      "cordova.plugins.diagnostic": {}
     }
   }
 }
