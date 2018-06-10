@@ -36,6 +36,7 @@ export class TrackingLocationPage implements OnInit {
                 this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
                 this.getUserPosition();
             }).catch((error)=> {
+                 alert(JSON.stringify(error));
                  alert('Please enable the location details');
             });
         }
