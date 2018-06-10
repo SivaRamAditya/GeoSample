@@ -31,14 +31,16 @@ export class TrackingLocationPage implements OnInit {
             this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
             this.getUserPosition();
         } else {
-            this.diagnostic.isLocationEnabled().then((isAvailable)=> {
+            this.diagnostic.isLocationEnabled().then((isAvailable) => {
                 alert("Your current location is defaultly selected as starting point");
                 this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
                 this.getUserPosition();
-            }).catch((error)=> {
-                 alert(JSON.stringify(error));
-                 alert('Please enable the location details');
+            }, (error) => {
+                alert(JSON.stringify(error));
+                alert('Please enable the location details');
             });
+            this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
+            this.getUserPosition();
         }
     }
 
@@ -60,14 +62,14 @@ export class TrackingLocationPage implements OnInit {
         //     console.log("error : " + err.message);
         // });
         this.geoLocation.watchPosition(options).subscribe((position: Geoposition) => {
-            if (this.currentPosition !== position && this.watchCounter == 0) {                
+            if (this.currentPosition !== position && this.watchCounter == 0) {
                 this.geolocation = '';
                 this.currentPosition = position;
                 this.addMap(position.coords.latitude, position.coords.longitude);
                 this.watchCounter = 1;
                 this.marker = new google.maps.Marker({
                     map: this.map,
-                   // animation: google.maps.Animation.DROP,
+                    // animation: google.maps.Animation.DROP,
                     position: this.map.getCenter()
                 });
             } else {
