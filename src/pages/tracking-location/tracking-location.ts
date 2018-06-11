@@ -31,14 +31,18 @@ export class TrackingLocationPage implements OnInit {
             this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
             this.getUserPosition();
         } else {
-            this.diagnostic.isLocationEnabled().then((isAvailable) => {
+            this.platform.ready().then(()=> {
+             this.diagnostic.isLocationEnabled().then((isAvailable) => {
                 alert("Your current location is defaultly selected as starting point");
                 this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
                 this.getUserPosition();
-            }).catch((error) => {
+             }).catch((error) => {
                 alert(JSON.stringify(error));
                 alert('Please enable the location details');
-            });
+             });
+            }).catch((error)=> {
+              console.log(error);
+            });            
             this.autocomplete = new google.maps.places.Autocomplete(this.destElement.nativeElement);
             this.getUserPosition();
         }
@@ -69,9 +73,11 @@ export class TrackingLocationPage implements OnInit {
                 this.watchCounter = 1;
             } else {
                 //this.addMap(position.coords.latitude, position.coords.longitude);
+               if (this.currentPosition.coords.latitude !== position.coords.latitude && this.currentPosition.coords.longitude !== position.coords.longitude) {
                 let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 this.updateGeocode(latLng);
                 this.map.setCenter(latLng);
+              }
             }
         }, (err: PositionError) => {
             console.log("error : " + err.message);
