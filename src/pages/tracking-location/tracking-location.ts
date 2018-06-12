@@ -62,8 +62,8 @@ export class TrackingLocationPage implements OnInit {
             console.log(position);
             const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             this.map.setCenter(latLng);
-            this.trackedRoute.push({ lat: +position.coords.latitude, lng: +position.coords.longitude});
-            //this.updateGeocode(latLng);
+            this.trackedRoute.push({ lat: +position.coords.latitude, lng: +position.coords.longitude });
+            this.updateGeocode(latLng);
         }, (err: PositionError) => {
             console.log("error : " + err.message);
         });
@@ -120,20 +120,20 @@ export class TrackingLocationPage implements OnInit {
 
     redrawPath(path) {
         if (this.currentMapTrack) {
-          this.currentMapTrack.setMap(null);
+            this.currentMapTrack.setMap(null);
         }
-     
+
         if (path.length > 1) {
-          this.currentMapTrack = new google.maps.Polyline({
-            path: path,
-            geodesic: true,
-            strokeColor: '#ff00ff',
-            strokeOpacity: 1.0,
-            strokeWeight: 3
-          });
-          this.currentMapTrack.setMap(this.map);
+            this.currentMapTrack = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#ff00ff',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            this.currentMapTrack.setMap(this.map);
         }
-      }
+    }
 
     updateGeocode(latLng) {
         let geocoder = new google.maps.Geocoder();
@@ -153,37 +153,43 @@ export class TrackingLocationPage implements OnInit {
     }
 
     filterDuplicates(lat, lng) {
-        for(let index = 0; index< this.trackedRoute.length; index++) {
-            if(this.trackedRoute[index].lat !== lat && this.trackedRoute[index].lng !== lng ) {
-                this.trackedRoute.push({ lat: +lat, lng: +lng});
+        for (let index = 0; index < this.trackedRoute.length; index++) {
+            if (this.trackedRoute[index].lat !== lat && this.trackedRoute[index].lng !== lng) {
+                this.trackedRoute.push({ lat: +lat, lng: +lng });
                 break;
             }
         }
     }
     getDirections() {
-        const dest = this.autocomplete.getPlace().formatted_address;
-        //const directionsService = new google.maps.DirectionsService;
-        const location = this.autocomplete.getPlace().geometry.location;
-        this.filterDuplicates(location.lat(), location.lng());
-        
-        if( this.trackedRoute.length >= 2) {
-            this.redrawPath(this.trackedRoute);
-            this.addMarker(new google.maps.LatLng(location.lat(), location.lng()));
-           // this.startTracking();
-        }
-        
-        // this.directionsDisplay.setMap(this.map);
+        const dest = this.autocomplete.getPlace() && this.autocomplete.getPlace().formatted_address ?
+            this.autocomplete.getPlace().formatted_address : undefined;
+        if (dest) {
+            const directionsService = new google.maps.DirectionsService;
+            const location = this.autocomplete.getPlace().geometry.location;
+            this.filterDuplicates(location.lat(), location.lng());
 
-        // directionsService.route({
-        //     origin: this.origin,
-        //     destination: dest,
-        //     travelMode: 'DRIVING'
-        // }, (response, status) => {
-        //     if (status === 'OK') {
-        //         this.directionsDisplay.setDirections(response);
-        //     } else {
-        //         alert('Directions request failed due to ' + status);
-        //     }
-        // });
+            if (this.trackedRoute.length >= 2) {
+               // this.redrawPath(this.trackedRoute);
+                //this.addMarker(new google.maps.LatLng(location.lat(), location.lng()));
+            }
+
+            this.directionsDisplay.setMap(this.map);
+
+            directionsService.route({
+                origin: this.origin,
+                destination: dest,
+                travelMode: 'DRIVING'
+            }, (response, status) => {
+                if (status === 'OK') {
+                    this.directionsDisplay.setDirections(response);
+                    this.startTracking();
+                } else {
+                    alert('Directions request failed due to ' + status);
+                }
+            });
+        } else {
+            alert('Enter destination location');
+        }
+
     }
 }
