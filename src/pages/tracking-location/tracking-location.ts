@@ -24,6 +24,7 @@ export class TrackingLocationPage implements OnInit {
     marker: any;
     watchCounter: number = 0;
     autocomplete: any;
+    watchPosition: any;
     directionsDisplay = new google.maps.DirectionsRenderer;
     origin: string;
     constructor(private geoLocation: Geolocation, private platform: Platform, private diagnostic: Diagnostic, private backgroundLocation: BackgroundGeolocation) { }
@@ -74,12 +75,12 @@ export class TrackingLocationPage implements OnInit {
     startTracking() {
 
         const options = {
-            enableHighAccuracy: false,
+            enableHighAccuracy: true,
             frequency: 3000
         };
 
         this.trackedRoute = [];
-        this.geoLocation.watchPosition(options).pipe(
+        this.watchPosition = this.geoLocation.watchPosition(options).pipe(
             filter((p) => p.coords !== undefined) //Filter Out Errors
         ).subscribe((position: Geoposition) => {
             if (this.currentPosition.coords.latitude !== position.coords.latitude && this.currentPosition.coords.longitude !== position.coords.longitude) { //&& this.watchCounter == 0) {
@@ -162,9 +163,9 @@ export class TrackingLocationPage implements OnInit {
         }
     }
     getDirections() {
-        const dest = this.autocomplete.getPlace() && this.autocomplete.getPlace().formatted_address ?
+        const dest = this.autocomplete.getPlace() && this.autocomplete.getPlace().formatted_address && this.geolocation ?
             this.autocomplete.getPlace().formatted_address : undefined;
-        if (dest) {
+        if (dest && this.geolocation) {
             const directionsService = new google.maps.DirectionsService;
             const location = this.autocomplete.getPlace().geometry.location;
             this.filterDuplicates(location.lat(), location.lng());
@@ -173,7 +174,9 @@ export class TrackingLocationPage implements OnInit {
                 // this.redrawPath(this.trackedRoute);
                 //this.addMarker(new google.maps.LatLng(location.lat(), location.lng()));
             }
-
+            if (this.watchPosition) {
+                this.watchPosition.unsubscribe();
+            }
             this.directionsDisplay.setMap(this.map);
 
             directionsService.route({
