@@ -63,6 +63,7 @@ export class TrackingLocationPage implements OnInit {
             const latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             this.map.setCenter(latLng);
             this.trackedRoute.push({ lat: +position.coords.latitude, lng: +position.coords.longitude });
+            this.currentPosition = position;
             this.updateGeocode(latLng);
         }, (err: PositionError) => {
             console.log("error : " + err.message);
@@ -81,11 +82,10 @@ export class TrackingLocationPage implements OnInit {
         this.geoLocation.watchPosition(options).pipe(
             filter((p) => p.coords !== undefined) //Filter Out Errors
         ).subscribe((position: Geoposition) => {
-            if (this.currentPosition !== position) { //&& this.watchCounter == 0) {
-                this.geolocation = '';
+            if (this.currentPosition.coords.latitude !== position.coords.latitude && this.currentPosition.coords.longitude !== position.coords.longitude) { //&& this.watchCounter == 0) {
                 this.currentPosition = position;
                 this.filterDuplicates(position.coords.latitude, position.coords.longitude);
-                this.redrawPath(this.trackedRoute);
+                this.addMarker(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
                 this.watchCounter = 1;
             } else {
                 // if (this.currentPosition.coords.latitude !== position.coords.latitude && this.currentPosition.coords.longitude !== position.coords.longitude) {
@@ -106,16 +106,17 @@ export class TrackingLocationPage implements OnInit {
                 // animation: google.maps.Animation.DROP,
                 position: this.map.getCenter()
             });
+            let content = "<p>This is your current position !</p>";
+            let infoWindow = new google.maps.InfoWindow({
+                content: content
+            });
+            google.maps.event.addListener(this.marker, 'click', () => {
+                infoWindow.open(this.map, this.marker);
+            });
         } else {
             this.marker.setPosition(latLng);
         }
-        let content = "<p>This is your current position !</p>";
-        let infoWindow = new google.maps.InfoWindow({
-            content: content
-        });
-        google.maps.event.addListener(this.marker, 'click', () => {
-            infoWindow.open(this.map, this.marker);
-        });
+
     }
 
     redrawPath(path) {
@@ -169,7 +170,7 @@ export class TrackingLocationPage implements OnInit {
             this.filterDuplicates(location.lat(), location.lng());
 
             if (this.trackedRoute.length >= 2) {
-               // this.redrawPath(this.trackedRoute);
+                // this.redrawPath(this.trackedRoute);
                 //this.addMarker(new google.maps.LatLng(location.lat(), location.lng()));
             }
 
