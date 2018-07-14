@@ -15,6 +15,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
+import { FBSigninComponent } from './fb-signin-component';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
