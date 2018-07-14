@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +16,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
+import { AwsService } from './aws.service';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -44,6 +46,7 @@ export function provideSettings(storage: Storage) {
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {
@@ -60,6 +63,7 @@ export function provideSettings(storage: Storage) {
     MyApp
   ],
   providers: [
+    AwsService,
     Diagnostic,
     BackgroundGeolocation,
     Geolocation,
