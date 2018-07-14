@@ -55,7 +55,7 @@ export class GoogleSigninComponent implements AfterViewInit {
   googleLogin() {
     this.googlePlus.login({})
       .then(res =>
-        console.log(res)
+        alert
       ).catch(err =>
         console.error(err));
   }
@@ -66,7 +66,7 @@ export class GoogleSigninComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.googleInit();
-    this.googlePlus.getSigningCertificateFingerprint().then((res)=> console.log(res)).catch(error => console.log(error));
+    this.googlePlus.getSigningCertificateFingerprint().then((res)=> console.log(res)).catch(error => alert(error));
   }
 
   googleCallback(creds: any, profile: any) {
