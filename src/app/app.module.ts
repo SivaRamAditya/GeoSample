@@ -17,6 +17,7 @@ import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
 import { AwsService } from './aws.service';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -67,6 +68,7 @@ export function provideSettings(storage: Storage) {
     Diagnostic,
     BackgroundGeolocation,
     Geolocation,
+    GooglePlus,
     Api,
     Items,
     User,

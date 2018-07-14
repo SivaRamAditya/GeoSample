@@ -27,6 +27,7 @@
     "@ionic-native/core": "4.7.0",
     "@ionic-native/diagnostic": "^4.7.0",
     "@ionic-native/geolocation": "^4.7.0",
+    "@ionic-native/google-plus": "^4.9.2",
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/status-bar": "4.7.0",
     "@ionic/pro": "1.0.20",
@@ -40,6 +41,7 @@
     "cordova-android": "7.0.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.1",
+    "cordova-plugin-googleplus": "^5.3.0",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^1.1.19",
     "cordova-plugin-mauron85-background-geolocation": "^2.3.5",
@@ -75,7 +77,10 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "com.apps.googleusercontent.ggv0j02j601cds9t1ebs72nu27odkb9q-1003662980890"
+      }
     },
     "platforms": [
       "android"

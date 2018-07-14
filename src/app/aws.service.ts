@@ -28,6 +28,7 @@ export class AwsService {
   /************ RESOURCE IDENTIFIERS *************/
   appId = '500380957049008';
   googleId = '1003662980890-ggv0j02j601cds9t1ebs72nu27odkb9q.apps.googleusercontent.com';
+  reverseGoogleId = 'com.apps.googleusercontent.ggv0j02j601cds9t1ebs72nu27odkb9q-1003662980890';
   poolData = {
     UserPoolId: 'XXXXXXXXXXXXXXXXXXXXXXXXXXX', // CognitoUserPool
     ClientId: 'XXXXXXXXXXXXXXXXXXXXXXXXXXX', // CognitoUserPoolClient

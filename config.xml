@@ -85,4 +85,7 @@
     <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.3.5" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.8" />
     <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-googleplus" spec="^5.3.0">
+        <variable name="REVERSED_CLIENT_ID" value="com.apps.googleusercontent.ggv0j02j601cds9t1ebs72nu27odkb9q-1003662980890" />
+    </plugin>
 </widget>
