@@ -55,9 +55,9 @@ export class GoogleSigninComponent implements AfterViewInit {
   googleLogin() {
     this.googlePlus.login({})
       .then(res =>
-        alert
+        alert(res)
       ).catch(err =>
-        console.error(err));
+        alert(err));
   }
 
   constructor(private element: ElementRef, public awsService: AwsService, private googlePlus: GooglePlus) {
