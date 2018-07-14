@@ -3,7 +3,7 @@ import { AwsService } from '../app/aws.service';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Callback } from '../app/aws.service';
 
-declare const gapi: any;
+// declare const gapi: any;
 
 @Component({
   selector: 'app-google-signin',
